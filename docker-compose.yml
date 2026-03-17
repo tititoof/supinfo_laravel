@@ -1,0 +1,86 @@
+services:
+
+  app:
+    image: laravel_app_supinfo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app_supinfo
+    restart: unless-stopped
+    environment:
+      SERVER_NAME: ":80"
+      APP_ENV: local
+      APP_KEY: "${APP_KEY}"
+      APP_DEBUG: "true"
+      APP_URL: http://localhost
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: laravel
+      DB_PASSWORD: secret
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/app
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:8.4
+    container_name: laravel_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "laravel", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - laravel
+
+  # Service one-shot pour installer Laravel (à lancer une seule fois)
+  installer:
+    image: composer:latest
+    container_name: laravel_installer
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+        if [ ! -f /app/artisan ]; then
+          echo '>>> Installation de Laravel 12...' &&
+          composer create-project laravel/laravel:^12 /tmp/laravel &&
+          cp -r /tmp/laravel/. /app/ &&
+          echo '>>> Laravel installé avec succès !'
+        else
+          echo '>>> Laravel déjà installé, installation ignorée.'
+        fi
+      "
+    networks:
+      - laravel
+    profiles:
+      - install
+
+volumes:
+  mysql_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  laravel:
+    driver: bridge
