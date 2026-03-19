@@ -13,14 +13,15 @@ class StoreArticleRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'name'           => ['required', 'string', 'max:255'],
-            'nb_stock'       => ['required', 'integer', 'min:0'],
-            'origin_country' => ['required', 'string', 'max:255'],
-            'unit_price'     => ['required', 'numeric', 'min:0'],
-            'discount'       => ['required', 'numeric', 'min:0', 'max:100'],
-            'tva'            => ['required', 'numeric', 'min:0', 'max:100'],
-        ];
+        return CommonArticleRequest::rules();
+        // return [
+        //     'name'           => ['required', 'string', 'max:255'],
+        //     'nb_stock'       => ['required', 'integer', 'min:0'],
+        //     'origin_country' => ['required', 'string', 'max:255'],
+        //     'unit_price'     => ['required', 'numeric', 'min:0'],
+        //     'discount'       => ['required', 'numeric', 'min:0', 'max:100'],
+        //     'tva'            => ['required', 'numeric', 'min:0', 'max:100'],
+        // ];
     }
 
     public function messages(): array
