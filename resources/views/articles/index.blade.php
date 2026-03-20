@@ -1,4 +1,4 @@
-@extends('articles.layout')
+@extends('auth.layout')
 
 @section('title', 'Liste des articles')
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartReceipController;
-use App\Http\Controllers\ReceipController;  
+use App\Http\Controllers\ReceipController;
 use App\Http\Controllers\LoginController;
 
 /*
@@ -22,12 +22,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
- 
     Route::resource('articles', ArticleController::class);
     Route::resource('cart', CartController::class);
     Route::resource('receips', ReceipController::class);
     Route::resource('cart-receip', CartReceipController::class);
-
- 
 });
  
