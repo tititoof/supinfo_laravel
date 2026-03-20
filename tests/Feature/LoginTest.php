@@ -155,7 +155,6 @@ class LoginTest extends TestCase
             route('receips.index'),
             route('cart-receip.index'),
         ];
-
         foreach ($routes as $route) {
             $this->get($route)->assertRedirect(route('login'));
         }
