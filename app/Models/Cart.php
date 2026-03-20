@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Cart extends Model
 {
-    protected $table = 'cart';
+    protected $table = 'carts';
 
     protected $fillable = [
         'article_id',

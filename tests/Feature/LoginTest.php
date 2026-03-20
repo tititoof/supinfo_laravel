@@ -6,10 +6,12 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     // -------------------------------------------------------------------------
     // Affichage du formulaire
@@ -136,9 +138,9 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->post(route('logout'));
-
-        $this->assertFalse(Auth::check());
+        $response = $this->actingAs($user)->post(route('logout'));
+        $response->assertRedirect(route('login'));
+        $response->assertSessionMissing('auth');
     }
 
     // -------------------------------------------------------------------------
