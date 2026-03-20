@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartReceipController;
+use App\Http\Controllers\ReceipController;  
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
